@@ -1,0 +1,3 @@
+- implement encryption
+- implement communication (serialization, deserialization)
+- implement server side logic
