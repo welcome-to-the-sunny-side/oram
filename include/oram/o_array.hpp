@@ -22,11 +22,15 @@ public:
     vector<bool> in_stash;          //in_stash[i] = true => i'th element is in the stash
     client_network_communicator<block_type> &communicator;
     unordered_map<int, block_type> stash;
+
+    //auxiliary encryption stuff, remove later
+    vector<int> encrypt_val, encrypt_idx;
     
     o_array(int n, client_network_communicator<block_type>& given_communicator) :
-    n(n), L(static_cast<int>(log2(n)) + 1), N (1 << L), id(o_array_id_cntr ++), leaf_map(N), in_stash(N, true), communicator(given_communicator)
+    n(n), L(static_cast<int>(log2(n)) + 1), N (1 << L), id(o_array_id_cntr ++), leaf_map(N), in_stash(N, true), communicator(given_communicator), encrypt_val(N), encrypt_idx(N)
     {
         //send message to server, informing it about the creation of this array
+        
     };
 
     //pass any lambda `use` you wish here, note that you may want to take the block in by reference
@@ -48,6 +52,10 @@ public:
         for(auto &blk : path_blocks)
         {
             blk.decrypt();
+
+            if(blk.idx == -1)   //dummy block
+                continue;
+
             if(blk.idx == i)
                 use(blk); //modify or do whatever you want with this block
             //we re-encrypt the block to preserve privacy
@@ -60,8 +68,10 @@ public:
 
         for(int d = L; d >= 0; d --)
         {
-            //implement this part later (write back to the server through the network to evict blocks from the stash)
+            vector<block_type> wrt;
+            for(auto [idx, ])
         }
     }
+
 
 };

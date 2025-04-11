@@ -1,14 +1,29 @@
 #pragma once
 
+#include<string>
+
 class block
 {
 public:
-    int v;
+    int value;
+    int idx;
 
-    void encrypt()
+    block(int v, int i) : value(v), idx(i) {};
+    block(std::string serialized_block)
     {
+
+    };
+
+    void encrypt(int x, int y)
+    {
+        value ^= x, idx ^= y;
     }
-    void decrypt()
+    void decrypt(int x, int y)
     {
+        value ^= x, idx ^= y;
+    }
+    std::string serialize()
+    {
+
     }
 };
