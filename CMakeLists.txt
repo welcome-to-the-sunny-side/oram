@@ -5,6 +5,11 @@ project(BoostMultiTarget)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Find libsodium
+set(SODIUM_ROOT /opt/homebrew)
+include_directories(${SODIUM_ROOT}/include)
+link_directories(${SODIUM_ROOT}/lib)
+
 # Find Boost
 find_package(Boost REQUIRED COMPONENTS system)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -20,7 +25,7 @@ add_executable(client
     src/oram/bucket.cpp
 )
 
-target_link_libraries(client PRIVATE Boost::system)
+target_link_libraries(client PRIVATE Boost::system sodium)
 
 # === Server Executable ===
 add_executable(server
@@ -29,4 +34,4 @@ add_executable(server
     src/oram/bucket.cpp
 )
 
-target_link_libraries(server PRIVATE Boost::system)
+target_link_libraries(server PRIVATE Boost::system sodium)

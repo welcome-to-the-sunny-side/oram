@@ -12,7 +12,7 @@ template<typename block_type>
 class oram
 {
 public:
-    using bckt = bucket<block_type>
+    using bckt = bucket<block_type>;
     int n;
     int L;
     int N;
@@ -35,8 +35,8 @@ public:
     //unused
     vector<block_type> read_bucket(int leaf_idx, int depth)
     {
-        int node_idx = (leaf_idx, depth);
-        return vector<block_type> (tree[node_idx].blocks, tree[node_idx].blocks + bucket::bucket_size);
+        int node_idx = get_node_idx(leaf_idx, depth);
+        return vector<block_type> (tree[node_idx].blocks, tree[node_idx].blocks + bckt::bucket_size);
     }
 
     vector<block_type> read_path(int leaf_idx)
@@ -50,7 +50,7 @@ public:
 
     void write_to_bucket(int leaf_idx, int depth, vector<block_type> blocks)
     {
-        assert(blocks.size() == bucket::bucket_size);
+        assert(blocks.size() == bckt::bucket_size);
         copy(blocks.begin(), blocks.end(), tree[get_node_idx(leaf_idx, depth)]);
     }
 };

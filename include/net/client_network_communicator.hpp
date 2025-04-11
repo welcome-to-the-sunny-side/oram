@@ -6,6 +6,12 @@ template<typename block_type>
 class client_network_communicator
 {
     using bckt = bucket<block_type>;
+
+    void create_array(int array_id, int array_size)
+    {
+        //send message requesting the server to create another instance of o-ram
+    }
+
     vector<block_type> request_path(int array_id, int leaf_idx)
     {
         vector<block_type> b;
