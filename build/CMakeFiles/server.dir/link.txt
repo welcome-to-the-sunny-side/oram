@@ -1,1 +1,0 @@
-/usr/bin/clang++ -g -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/server.dir/src/server/server_main.cpp.o CMakeFiles/server.dir/src/oram/block.cpp.o CMakeFiles/server.dir/src/oram/bucket.cpp.o -o server  /opt/homebrew/Cellar/boost/1.87.0_1/lib/libboost_system.dylib

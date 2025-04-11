@@ -1,4 +1,0 @@
-/Users/unalive/Projects/oram/build/CMakeFiles/client.dir
-/Users/unalive/Projects/oram/build/CMakeFiles/server.dir
-/Users/unalive/Projects/oram/build/CMakeFiles/edit_cache.dir
-/Users/unalive/Projects/oram/build/CMakeFiles/rebuild_cache.dir
