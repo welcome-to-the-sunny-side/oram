@@ -1,6 +1,10 @@
 {
     "cph.general.saveLocation": "",
     "files.associations": {
-        "vector": "cpp"
-    }
+        "vector": "cpp",
+        "iostream": "cpp",
+        "__hash_table": "cpp",
+        "unordered_map": "cpp"
+    },
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json"
 }

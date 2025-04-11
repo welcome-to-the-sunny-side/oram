@@ -1,13 +1,11 @@
 #pragma once
 
 #include <vector>
-#include "block.hpp"
 
-constexpr int bucket_size = 4;  //Z
-
+template<typename block_type>
 class bucket
 {
-private:
-    block b[bucket_size];
-public: 
+public:
+    static constexpr int bucket_size = 4;
+    block_type blocks[bucket_size];
 };

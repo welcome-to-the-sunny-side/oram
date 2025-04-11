@@ -1,20 +1,15 @@
-#include<iostream>
+#include <iostream>
 
+#include "include/oram/server_storage.hpp"
 
 using namespace std;
 
 int main()
 {
-    //handle socket stuff
+    std::cout << "number of elements" << std::endl;
 
-    if("operation is write")
-    {
+    int n;
+    cin >> n;
 
-    }
-    else if("operation is read")
-    {
-
-    }
-
-
+    
 }

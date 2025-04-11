@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/client.dir/src/client/client_main.cpp.o -c /Users/unalive/Projects/oram/src/client/client_main.cpp",
+  "file": "/Users/unalive/Projects/oram/src/client/client_main.cpp",
+  "output": "CMakeFiles/client.dir/src/client/client_main.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/client.dir/src/client/client_stash.cpp.o -c /Users/unalive/Projects/oram/src/client/client_stash.cpp",
+  "file": "/Users/unalive/Projects/oram/src/client/client_stash.cpp",
+  "output": "CMakeFiles/client.dir/src/client/client_stash.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/client.dir/src/oram/block.cpp.o -c /Users/unalive/Projects/oram/src/oram/block.cpp",
+  "file": "/Users/unalive/Projects/oram/src/oram/block.cpp",
+  "output": "CMakeFiles/client.dir/src/oram/block.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/client.dir/src/oram/bucket.cpp.o -c /Users/unalive/Projects/oram/src/oram/bucket.cpp",
+  "file": "/Users/unalive/Projects/oram/src/oram/bucket.cpp",
+  "output": "CMakeFiles/client.dir/src/oram/bucket.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/server.dir/src/server/server_main.cpp.o -c /Users/unalive/Projects/oram/src/server/server_main.cpp",
+  "file": "/Users/unalive/Projects/oram/src/server/server_main.cpp",
+  "output": "CMakeFiles/server.dir/src/server/server_main.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/server.dir/src/oram/block.cpp.o -c /Users/unalive/Projects/oram/src/oram/block.cpp",
+  "file": "/Users/unalive/Projects/oram/src/oram/block.cpp",
+  "output": "CMakeFiles/server.dir/src/oram/block.cpp.o"
+},
+{
+  "directory": "/Users/unalive/Projects/oram/build",
+  "command": "/usr/bin/clang++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/Users/unalive/Projects/oram -isystem /opt/homebrew/Cellar/boost/1.87.0_1/include -g -std=gnu++17 -arch arm64 -o CMakeFiles/server.dir/src/oram/bucket.cpp.o -c /Users/unalive/Projects/oram/src/oram/bucket.cpp",
+  "file": "/Users/unalive/Projects/oram/src/oram/bucket.cpp",
+  "output": "CMakeFiles/server.dir/src/oram/bucket.cpp.o"
+}
+]
