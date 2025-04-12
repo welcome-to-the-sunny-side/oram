@@ -28,6 +28,35 @@ int main()
 
     o_array oa(n, cnc);
 
+    for(int i = 0; i < n; i ++)
+    {
+        int x;
+        std::cin >> x;
+        oa[i] = x;
+    }
+
+    std::cout << oa[0] + oa[1] << std::endl;
+
+/*
+    while(1)
+    {
+        int t;
+        std::cin >> t;
+        if(t == 1)
+        {
+            int i, x;
+            std::cin >> i >> x;
+            oa[i] = x;
+        }
+        else if(t == 2)
+        {
+            int i;
+            std::cin >> i;
+            std::cout << oa[i] << std::endl;
+        }
+    }
+*/
+/*
     while(1)
     {
         int t;
@@ -58,6 +87,7 @@ int main()
             }
         }
     }
+*/
 
     cnc.end_session();
 

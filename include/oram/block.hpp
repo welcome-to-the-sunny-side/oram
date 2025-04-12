@@ -11,8 +11,9 @@ namespace oram_lib
     public:
         int val;
         int idx;
+        bool rsrvd = false;
 
-        block(int v, int i) : val(v), idx(i) {};
+        block(int v, int i) : val(v), idx(i), rsrvd(false) {};
         block() : block(0, 0) {};
         block(std::string serialized_block)
         {
@@ -27,6 +28,7 @@ namespace oram_lib
                 val = 0;
                 idx = 0;
             }
+            rsrvd = false;
         };
 
         std::string encrypt()

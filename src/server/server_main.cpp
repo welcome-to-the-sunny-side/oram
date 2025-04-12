@@ -36,8 +36,7 @@ int main()
                 uint8_t msg_code;
                 boost::asio::read(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)));
                 
-                std::cerr << rng(1000000000) << std::endl;
-                std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
+                // std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
                 switch (msg_code)
                 {
@@ -106,7 +105,7 @@ int main()
 
                     if(bucket_content.size() != bucket<std::string>::bucket_size)
                     {
-                        std::cerr << "inappropriate bucket content size" << std::endl;
+                        throw std::runtime_error("inappropriate bucket content size");
                         break;
                     }
 
@@ -121,21 +120,21 @@ int main()
                 }
                 default:
                 {
-                    std::cerr << "Invalid message code: " << msg_code << std::endl;
+                    throw std::runtime_error("invalid message code: " + std::to_string(msg_code));
                     break;
                 }
                 }
             }
             catch (std::exception &e)
             {
-                std::cerr << "Message handling error: " << e.what() << std::endl;
+                throw std::runtime_error("message handling error: " + std::string(e.what()));
                 break;
             }
         }
     }
     catch (std::exception &e)
     {
-        std::cerr << "Connection error: " << e.what() << std::endl;
+        throw std::runtime_error("connection error: " + std::string(e.what()));
     }
 
     return 0;
