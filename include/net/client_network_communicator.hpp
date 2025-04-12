@@ -16,8 +16,8 @@ namespace oram_lib
     private:
         boost::asio::io_context io_context;
         boost::asio::ip::tcp::socket socket;
-        const std::string server_address = "127.0.0.1";
-        const int server_port = 1234;
+        static constexpr int server_port = 1234;
+        inline static const std::string server_address = "127.0.0.1";
 
     public:
         using bckt = bucket<block>;
@@ -26,7 +26,7 @@ namespace oram_lib
         {
         }
 
-        void connect_to_server()
+        void connect_to_server(std::string p_server_address = server_address, int p_server_port = server_port)
         {
             boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::make_address(server_address), server_port);
             socket.connect(endpoint);

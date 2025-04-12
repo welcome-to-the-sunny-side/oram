@@ -135,6 +135,17 @@ namespace oram_lib
         public:
             element_proxy(o_array &a, int i) : arr(a), index(i) {}
 
+            // assignment operator for element_proxy
+            element_proxy &operator=(const element_proxy &other)
+            {
+                if (this != &other)
+                {
+                    int val = static_cast<int>(other);
+                    *this = val;
+                }
+                return *this;
+            }
+
             // assignment operator  
             element_proxy &operator=(int val)
             {

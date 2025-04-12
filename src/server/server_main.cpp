@@ -16,9 +16,12 @@ int main()
     std::unordered_map<int, int> oram_id_to_idx;
 
     boost::asio::io_context io_context;
-    tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v4(), 1234));
 
-    std::cout << "Server is running on port 1234" << std::endl;
+    const std::string server_address = "127.0.0.1";
+    const int server_port = 1234;
+
+    tcp::acceptor acceptor(io_context, tcp::endpoint(boost::asio::ip::make_address("127.0.0.1"), server_port));
+    std::cout << "Server is running on port " << server_port << std::endl;
 
     try
     {
