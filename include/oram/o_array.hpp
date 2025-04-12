@@ -2,117 +2,137 @@
 
 #include <vector>
 #include <cmath>
+#include <unordered_map>
 
+#include "block.hpp"
 #include "bucket.hpp"
 #include "rng.hpp"
-#include "encrypt.hpp"
 #include "../net/client_network_communicator.hpp"
 
-using namespace std;
-
-// array stored on the cloud obliviously
-template<typename block_type>
-class o_array
+namespace oram_lib
 {
-public:
-    using bckt = bucket<block_type>;
-
-    static int o_array_id_cntr = 0;
-
-    int n;      //number of elements
-    int L, N;   //tree parameters
-    int id;
-    vector<int> leaf_map;           //leaf_map[i] = the index of the leaf that the i'th element is mapped to
-    vector<bool> in_stash;          //in_stash[i] = true => i'th element is in the stash
-    client_network_communicator<block_type> &communicator;
-    unordered_map<int, block_type> stash;
-
-    //initialize an o_array, initially filled with 0s
-    o_array(int n, client_network_communicator<block_type>& given_communicator) :
-    n(n), L(static_cast<int>(log2(n)) + 1), N (1 << L), id(o_array_id_cntr ++), leaf_map(N, -1), in_stash(N, true), communicator(given_communicator)
+    // array stored on the cloud obliviously
+    class o_array
     {
-        communicator.create_array(id, n);
-    };
+    public:
+        using bckt = bucket<block>;
 
-    //pass any lambda `use` you wish here, note that you may want to take the block in by reference
-    void access(int i, auto use)
-    {
-        if(in_stash[i])
+        static constexpr int P = 1000000007;
+        inline static int o_array_id_cntr = 0;
+
+        int n;      //number of elements
+        int L, N;   //tree parameters
+        int id;     //array id
+        std::vector<int> leaf_map;           //leaf_map[i] = the index of the leaf that the i'th element is mapped to
+        std::vector<bool> in_stash;          //in_stash[i] = true => i'th element is in the stash
+        client_network_communicator &communicator;
+        std::unordered_map<int, block> stash;   //local stash of blocks
+
+        //initialize an o_array, initially filled with 0s
+        o_array(int n, client_network_communicator& given_communicator) :
+        n(n), L(static_cast<int>(log2(n)) + 1), N (1 << L), id(o_array_id_cntr ++), leaf_map(N, -1), in_stash(N, false), communicator(given_communicator)
         {
-            blk.decrypt();
-            use(stash[i]);
-            blk.encrypt();
-            return;
+            communicator.create_array(id, n);
+
+            //fill it with dummy blocks initially 
+
+            for(int leaf_idx = 0; leaf_idx < N/2; leaf_idx ++)
+                for(int depth = 0; depth <= L; depth ++)
+                {
+                    bucket<block> b;
+                    for(int i = 0; i < bckt::bucket_size; i ++)
+                        b.blocks[i] = block(0, N + 1);
+                    communicator.write_to_bucket(id, leaf_idx, depth, b);
+                }
         }
 
-        int l = leaf_map[i];
-
-        if(l == -1)
+        //pass any lambda `use` you wish here, note that you may want to take the block in by reference
+        template<typename F>
+        void access(int i, F use)
         {
-            //uninitialized block
+
+            int l = leaf_map[i];
+
+            if(l == -1)
+            {
+                //uninitialized block
+                leaf_map[i] = rng(N/2);
+                stash[i] = block(0, i);
+                use(stash[i]);
+                in_stash[i] = true;
+            }
+            else if(in_stash[i])
+            {
+                use(stash[i]);
+            }
+            else
+            {
+                //request blocks on the relevant path from the server 
+                //we assume that we receive decrypted blocks from the server
+                std::vector<block> path_blocks = communicator.request_path(id, l);
+
+                for(auto &blk : path_blocks)
+                {
+                    std::cerr << "Received block with index: " << blk.idx << std::endl;
+                    if(blk.idx == N + 1)   //dummy block
+                        continue;
+
+                    if(blk.idx == i)
+                        use(blk); //modify or do whatever you want with this block
+
+                    in_stash[blk.idx] = true;
+                    stash[blk.idx] = blk;
+                }
+            }
+
             leaf_map[i] = rng(N/2);
-            stash[i] = block_type(0, i);
-            use(stash[i]);
-            stash[i].encrypt();
+
+            //trivial write-back algorithm for now, optimize it later
+            for(int d = L; d >= 0; d --)
+            {
+                int node = get_node_idx(l, d);
+
+                std::vector<int> chosen;
+                for(auto [idx, blk] : stash)
+                {
+                    if(node == get_node_idx(leaf_map[idx], d))
+                        chosen.push_back(idx);
+                    if(chosen.size() == bckt::bucket_size)
+                        break;
+                }
+
+                std::cerr << "chosen is: " << std::endl;
+                for(auto x : chosen)
+                    std::cerr << x << " ";
+                std::cerr << std::endl;
+
+                bckt bkt;
+                for(int i = 0; i < chosen.size(); i ++)
+                {
+                    bkt.blocks[i] = stash[chosen[i]];
+                    stash.erase(chosen[i]);
+                    in_stash[chosen[i]] = false;
+                }
+                for(int i = int(chosen.size()); i < bckt::bucket_size; i ++)
+                {
+                    //just use a dummy node with index N + 1
+                    block b (0, N + 1);
+                    bkt.blocks[i] = b;
+                }
+
+                std::cerr << "The bucket is: " << std::endl;
+                for(int i = 0; i < bckt::bucket_size; i ++)
+                    std::cerr << "index: " << bkt.blocks[i].idx << " value: " << bkt.blocks[i].val << std::endl;
+
+                //communicator shall handle the necessary encryption
+                communicator.write_to_bucket(id, l, d, bkt);
+            }
         }
-        else
+
+    private:
+        int get_node_idx (int leaf_idx, int depth)
         {
-            //request blocks on the relevant path from the server 
-            vector<block_type> path_blocks = communicator.request_path(id, l);
-
-            for(auto &blk : path_blocks)
-            {
-                blk.decrypt();
-
-                if(blk.idx == N + 1)   //dummy block
-                    continue;
-
-                if(blk.idx == i)
-                    use(blk); //modify or do whatever you want with this block
-
-                //we re-encrypt the block to preserve privacy
-                blk.encrypt();
-
-                in_stash[idx] = true;
-                stash[idx] = blk;
-            }
+            return (1 << depth) + (leaf_idx/(1 << (L - depth))); 
         }
-
-        leaf_map[i] = rng(N/2);
-
-        for(int d = L; d >= 0; d --)
-        {
-            int node = get_node_idx(l, d);
-
-            vector<int> chosen;
-            for(auto [idx, blk] : stash)
-            {
-                if(node == get_node_idx(leaf_map[idx], d))
-                    chosen.push_back(idx);
-                if(chosen.size() >= bckt::bucket_size)
-                    break;
-            }
-
-            for(int i = 0; i < chosen.size(); i ++)
-            {
-                bkt[i] = stash[chosen[i]];
-                stash.erase(chosen[i]);
-            }
-            for(int i = int(chosen.size()) + 1; i < bckt::bucket_size; i ++)
-            {
-                //just use a dummy node with index N + 1
-                block_type b (rng(P), N + 1);
-                b.encrypt();
-                bkt[i] = b;
-            }
-
-            communicator.write_to_bucket(id, l, d, bkt);
-        }
-    }
-
-private:
-    int get_node_idx (int leaf_idx, int depth)
-    {
-        return (1 << depth) + (leaf_idx/(1 << (L - 1 - depth))); 
-    }
-};
+    };
+}

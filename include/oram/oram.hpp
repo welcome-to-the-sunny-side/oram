@@ -3,54 +3,52 @@
 #include <cassert>
 #include <vector>
 
+#include "block.hpp"
 #include "bucket.hpp"
 
-using namespace std;
-
-//internal representation of the path oram tree
-template<typename block_type>
-class oram
+namespace oram_lib
 {
-public:
-    using bckt = bucket<block_type>;
-    int n;
-    int L;
-    int N;
-    std::vector<bckt> tree;
-    oram(int n)
+    //internal representation of the path oram tree
+    class oram
     {
-        assert(n != 0);
-        this->n = n;
-        int L = 1 + static_cast<int>(std::log2(n));
-        N = (1 << L);
-        tree.resize(N);
-    }
-    oram() : oram(1){};
+    public:
+        using bckt = bucket<std::string>;
+        int n;
+        int L;
+        int N;
+        std::vector<bckt> tree;
+        oram(int n) : n(n), L(1 + static_cast<int>(std::log2(n))), N(1 << L), tree(N)
+        {
+        }
+        oram() : oram(1){};
 
-    int get_node_idx (int leaf_idx, int depth)
-    {
-        return (1 << depth) + (leaf_idx/(1 << (L - 1 - depth))); 
-    }
+        int get_node_idx (int leaf_idx, int depth)
+        {
+            return (1 << depth) + (leaf_idx/(1 << (L - depth))); 
+        }
 
-    //unused
-    vector<block_type> read_bucket(int leaf_idx, int depth)
-    {
-        int node_idx = get_node_idx(leaf_idx, depth);
-        return vector<block_type> (tree[node_idx].blocks, tree[node_idx].blocks + bckt::bucket_size);
-    }
+        //unused
+        std::vector<std::string> read_bucket(int leaf_idx, int depth)
+        {
+            int node_idx = get_node_idx(leaf_idx, depth);
+            return std::vector<std::string> (tree[node_idx].blocks, tree[node_idx].blocks + bckt::bucket_size);
+        }
 
-    vector<block_type> read_path(int leaf_idx)
-    {
-        vector<block_type> path_buckets;
-        for(int d = 0; d < L; d ++)
-            for(auto b : read_bucket(leaf_idx, d))
-                path_buckets.push_back(b);
-        return path_buckets;
-    }
+        std::vector<std::string> read_path(int leaf_idx)
+        {
+            std::vector<std::string> path_blocks;
+            for(int d = 0; d <= L; d ++)
+            {
+                int idx = get_node_idx(leaf_idx, d);
+                for(int i = 0; i < bckt::bucket_size; i ++)
+                    path_blocks.push_back(tree[idx].blocks[i]);
+            }
+            return path_blocks;
+        }
 
-    void write_to_bucket(int leaf_idx, int depth, vector<block_type> blocks)
-    {
-        assert(blocks.size() == bckt::bucket_size);
-        copy(blocks.begin(), blocks.end(), tree[get_node_idx(leaf_idx, depth)]);
-    }
-};
+        void write_to_bucket(int leaf_idx, int depth, bckt bc)
+        {
+            copy(bc.blocks, bc.blocks + bckt::bucket_size, tree[get_node_idx(leaf_idx, depth)].blocks);
+        }
+    };
+}
