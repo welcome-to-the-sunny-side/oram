@@ -1,3 +1,5 @@
-- implement encryption
-- implement communication (serialization, deserialization)
-- implement server side logic
+- write a validity checker
+- optimize
+- offer multiple encryption schemes
+- benchmark
+- template block for o_array
