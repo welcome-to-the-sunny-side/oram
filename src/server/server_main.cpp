@@ -4,9 +4,7 @@
 
 #include <boost/asio.hpp>
 
-#include "include/oram/rng.hpp"
-#include "include/oram/oram.hpp"
-#include "include/oram/bucket.hpp"
+#include "include/oram_lib.hpp"
 
 using namespace oram_lib;
 using namespace boost::asio;

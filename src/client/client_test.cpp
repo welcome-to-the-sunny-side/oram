@@ -4,11 +4,7 @@
 #include <cassert>
 #include <cstdlib>
 
-#include "include/oram/o_array.hpp"
-#include "include/net/client_network_communicator.hpp"
-#include "include/oram/bucket.hpp"
-#include "include/oram/block.hpp"
-#include "include/oram/encrypt.hpp"
+#include "include/oram_lib.hpp"
 
 using namespace oram_lib;
 
@@ -32,6 +28,7 @@ int main()
     
     for(int i = 1; i < n; i ++)
         oa[0] += oa[i] * oa[i];
+    oa[0] += oa[0];
     std::cout << oa[0] << std::endl;
 
     cnc.end_session();

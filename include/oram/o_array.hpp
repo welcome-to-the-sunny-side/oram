@@ -135,7 +135,7 @@ namespace oram_lib
         public:
             element_proxy(o_array &a, int i) : arr(a), index(i) {}
 
-            // Assignment operator
+            // assignment operator  
             element_proxy &operator=(int val)
             {
                 arr.touch(index);
@@ -148,7 +148,7 @@ namespace oram_lib
                 return *this;
             }
 
-            // Conversion operator to int for reading values
+            // conversion operator to int (default)
             operator int() const
             {
                 int result;
@@ -161,7 +161,7 @@ namespace oram_lib
             {
                 int val;
                 is >> val;
-                proxy = val; // Use existing assignment operator
+                proxy = val; // existing assignment operator
                 return is;
             }
 
@@ -169,18 +169,18 @@ namespace oram_lib
             {
                 int val;
                 is >> val;
-                proxy = val; // Use existing assignment operator
+                proxy = val; // existing assignment operator
                 return is;
             }
 
             friend std::ostream& operator<<(std::ostream& os, const element_proxy& proxy)
             {
-                os << static_cast<int>(proxy); // Use existing conversion operator
+                os << static_cast<int>(proxy); // existing conversion operator
                 return os;
             }
 
 
-            // Compound assignment operators
+            // compound assignment operators
             element_proxy &operator+=(int val)
             {
                 arr.touch(index);
@@ -229,9 +229,44 @@ namespace oram_lib
                 return *this;
             }
 
+            element_proxy &operator|=(int val)
+            {
+                arr.touch(index);
+                arr.stash[index].rsrvd = true;
+                arr.stash[index].val |= val;
+                arr.stash[index].rsrvd = false;
+                int l = arr.leaf_map[index];
+                arr.leaf_map[index] = rng(arr.N / 2);
+                arr.write_back(l);
+                return *this;
+            }
+
+            element_proxy &operator&=(int val)
+            {
+                arr.touch(index);
+                arr.stash[index].rsrvd = true;
+                arr.stash[index].val &= val;
+                arr.stash[index].rsrvd = false;
+                int l = arr.leaf_map[index];
+                arr.leaf_map[index] = rng(arr.N / 2);
+                arr.write_back(l);
+                return *this;
+            }
+
+            element_proxy &operator^=(int val)
+            {
+                arr.touch(index);
+                arr.stash[index].rsrvd = true;
+                arr.stash[index].val ^= val;
+                arr.stash[index].rsrvd = false;
+                int l = arr.leaf_map[index];
+                arr.leaf_map[index] = rng(arr.N / 2);
+                arr.write_back(l);
+                return *this;
+            }
         };
 
-        // Array subscript operator that returns the proxy object
+        // array subscript operator that returns the proxy object
         element_proxy operator[](int i)
         {
             return element_proxy(*this, i);

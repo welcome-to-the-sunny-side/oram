@@ -34,21 +34,29 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Include your headers if needed
 include_directories(${CMAKE_SOURCE_DIR})
 
+# Create ORAM library interface
+add_library(oram_lib INTERFACE)
+target_include_directories(oram_lib INTERFACE 
+    ${CMAKE_SOURCE_DIR}/include
+    ${OPENSSL_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
+    ${SODIUM_ROOT}/include
+)
+
+target_link_libraries(oram_lib INTERFACE
+    Boost::system 
+    Boost::serialization
+    sodium
+    OpenSSL::SSL 
+    OpenSSL::Crypto
+)
+
 # === Client Executable ===
 add_executable(client
     src/client/client_test.cpp
 )
 
-target_include_directories(client PRIVATE 
-    ${OPENSSL_INCLUDE_DIR}
-)
-
-target_link_libraries(client PRIVATE 
-    Boost::system 
-    sodium
-    OpenSSL::SSL 
-    OpenSSL::Crypto
-)
+target_link_libraries(client PRIVATE oram_lib)
 
 # === Server Executable ===
 add_executable(server
@@ -57,14 +65,4 @@ add_executable(server
     # src/oram/bucket.cpp
 )
 
-target_include_directories(server PRIVATE 
-    ${OPENSSL_INCLUDE_DIR}
-)
-
-target_link_libraries(server PRIVATE 
-    Boost::system 
-    Boost::serialization
-    sodium
-    OpenSSL::SSL 
-    OpenSSL::Crypto
-)
+target_link_libraries(server PRIVATE oram_lib)
