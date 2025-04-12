@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 #include <cmath>
 #include <unordered_map>
 
@@ -15,7 +16,12 @@ namespace oram_lib
     class o_array
     {
     public:
+        // Forward declare stream operators as friends
         using bckt = bucket<block>;
+
+        class element_proxy;
+        friend std::istream& operator>>(std::istream& is, element_proxy& proxy);
+        friend std::ostream& operator<<(std::ostream& os, const element_proxy& proxy);
 
         static constexpr int P = 1000000007;
         inline static int o_array_id_cntr = 0;
@@ -151,6 +157,29 @@ namespace oram_lib
                 return result;
             }
 
+            friend std::istream& operator>>(std::istream& is, element_proxy&& proxy)
+            {
+                int val;
+                is >> val;
+                proxy = val; // Use existing assignment operator
+                return is;
+            }
+
+            friend std::istream& operator>>(std::istream& is, element_proxy& proxy)
+            {
+                int val;
+                is >> val;
+                proxy = val; // Use existing assignment operator
+                return is;
+            }
+
+            friend std::ostream& operator<<(std::ostream& os, const element_proxy& proxy)
+            {
+                os << static_cast<int>(proxy); // Use existing conversion operator
+                return os;
+            }
+
+
             // Compound assignment operators
             element_proxy &operator+=(int val)
             {
@@ -200,19 +229,6 @@ namespace oram_lib
                 return *this;
             }
 
-            friend std::istream &operator>>(std::istream &is, element_proxy &ep)
-            {
-                int val;
-                is >> val;
-                ep = val; // Uses existing assignment operator
-                return is;
-            }
-
-            friend std::ostream &operator<<(std::ostream &os, const element_proxy &ep)
-            {
-                os << static_cast<int>(ep); // Uses existing conversion operator
-                return os;
-            }
         };
 
         // Array subscript operator that returns the proxy object
@@ -227,4 +243,5 @@ namespace oram_lib
             return (1 << depth) + (leaf_idx / (1 << (L - depth)));
         }
     };
+
 }
