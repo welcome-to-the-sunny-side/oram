@@ -4,6 +4,7 @@
 
 #include <boost/asio.hpp>
 
+#include "include/oram/rng.hpp"
 #include "include/oram/oram.hpp"
 #include "include/oram/bucket.hpp"
 
@@ -35,6 +36,7 @@ int main()
                 uint8_t msg_code;
                 boost::asio::read(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)));
                 
+                std::cerr << rng(1000000000) << std::endl;
                 std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
                 switch (msg_code)
@@ -101,8 +103,6 @@ int main()
                         boost::asio::read(socket, boost::asio::buffer(&str[0], str_len));
                         bucket_content.push_back(str);
                     }
-
-                    // std::cerr << "bucket content size: " << bucket_content.size() << std::endl;
 
                     if(bucket_content.size() != bucket<std::string>::bucket_size)
                     {

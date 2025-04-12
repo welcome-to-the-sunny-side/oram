@@ -42,9 +42,20 @@ int main()
         {
             int i;
             std::cin >> i;
-            int x;
+            int x = -1;
             oa.access(i, [&](block &b) {x = b.val;});
             std::cout << x << std::endl;
+        }
+        else if(t == 3)
+        {
+            std::cout << "displaying all blocks" << std::endl;
+            for(int node_idx = 0; node_idx < oa.N/2; node_idx ++)
+            {
+                std::vector<block> b = cnc.request_path(oa.id, node_idx);
+                for(int i = 0; i < b.size(); i ++)
+                    std::cout << "val: " << b[i].val << " idx: " << b[i].idx << std::endl;
+                std::cout << std::endl;
+            }
         }
     }
 

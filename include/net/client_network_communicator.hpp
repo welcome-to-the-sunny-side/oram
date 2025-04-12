@@ -79,7 +79,7 @@ namespace oram_lib
                     encrypted_strings.push_back(str);
                 }
 
-                std::cerr << "Received encrypted strings size: " << encrypted_strings.size() << std::endl;
+                // std::cerr << "Received encrypted strings size: " << encrypted_strings.size() << std::endl;
 
                 for (const auto &str : encrypted_strings)
                     res.push_back(block(block::decrypt(str)));

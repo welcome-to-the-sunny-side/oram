@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <vector>
+#include <cmath>
 
 #include "block.hpp"
 #include "bucket.hpp"
@@ -17,7 +18,7 @@ namespace oram_lib
         int L;
         int N;
         std::vector<bckt> tree;
-        oram(int n) : n(n), L(1 + static_cast<int>(std::log2(n))), N(1 << L), tree(N)
+        oram(int n) : n(n), L(1 + static_cast<int>(std::log2(n))), N(1 << (L + 1)), tree(N)
         {
         }
         oram() : oram(1){};
@@ -40,6 +41,7 @@ namespace oram_lib
             for(int d = 0; d <= L; d ++)
             {
                 int idx = get_node_idx(leaf_idx, d);
+                std::cerr << "fetching node " << idx << std::endl;
                 for(int i = 0; i < bckt::bucket_size; i ++)
                     path_blocks.push_back(tree[idx].blocks[i]);
             }
@@ -48,7 +50,9 @@ namespace oram_lib
 
         void write_to_bucket(int leaf_idx, int depth, bckt bc)
         {
-            copy(bc.blocks, bc.blocks + bckt::bucket_size, tree[get_node_idx(leaf_idx, depth)].blocks);
+            int node_idx = get_node_idx(leaf_idx, depth);
+            std::cerr << "writing to node " << node_idx << std::endl;
+            copy(bc.blocks, bc.blocks + bckt::bucket_size, tree[node_idx].blocks);
         }
     };
 }

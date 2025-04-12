@@ -30,7 +30,7 @@ namespace oram_lib
 
         //initialize an o_array, initially filled with 0s
         o_array(int n, client_network_communicator& given_communicator) :
-        n(n), L(static_cast<int>(log2(n)) + 1), N (1 << L), id(o_array_id_cntr ++), leaf_map(N, -1), in_stash(N, false), communicator(given_communicator)
+        n(n), L(static_cast<int>(log2(n)) + 1), N (1 << (L + 1)), id(o_array_id_cntr ++), leaf_map(N, -1), in_stash(N, false), communicator(given_communicator)
         {
             communicator.create_array(id, n);
 
@@ -50,13 +50,12 @@ namespace oram_lib
         template<typename F>
         void access(int i, F use)
         {
-
             int l = leaf_map[i];
 
             if(l == -1)
             {
                 //uninitialized block
-                leaf_map[i] = rng(N/2);
+                l = leaf_map[i] = rng(N/2);
                 stash[i] = block(0, i);
                 use(stash[i]);
                 in_stash[i] = true;
@@ -65,24 +64,21 @@ namespace oram_lib
             {
                 use(stash[i]);
             }
-            else
+
+            //request blocks on the relevant path from the server 
+            //we assume that we receive decrypted blocks from the server
+            std::vector<block> path_blocks = communicator.request_path(id, l);
+
+            for(auto &blk : path_blocks)
             {
-                //request blocks on the relevant path from the server 
-                //we assume that we receive decrypted blocks from the server
-                std::vector<block> path_blocks = communicator.request_path(id, l);
+                if(blk.idx == N + 1)    //dummy block
+                    continue;
 
-                for(auto &blk : path_blocks)
-                {
-                    std::cerr << "Received block with index: " << blk.idx << std::endl;
-                    if(blk.idx == N + 1)   //dummy block
-                        continue;
+                if(blk.idx == i)
+                    use(blk);           //bla bla bla
 
-                    if(blk.idx == i)
-                        use(blk); //modify or do whatever you want with this block
-
-                    in_stash[blk.idx] = true;
-                    stash[blk.idx] = blk;
-                }
+                in_stash[blk.idx] = true;
+                stash[blk.idx] = blk;
             }
 
             leaf_map[i] = rng(N/2);
@@ -101,11 +97,6 @@ namespace oram_lib
                         break;
                 }
 
-                std::cerr << "chosen is: " << std::endl;
-                for(auto x : chosen)
-                    std::cerr << x << " ";
-                std::cerr << std::endl;
-
                 bckt bkt;
                 for(int i = 0; i < chosen.size(); i ++)
                 {
@@ -120,16 +111,11 @@ namespace oram_lib
                     bkt.blocks[i] = b;
                 }
 
-                std::cerr << "The bucket is: " << std::endl;
-                for(int i = 0; i < bckt::bucket_size; i ++)
-                    std::cerr << "index: " << bkt.blocks[i].idx << " value: " << bkt.blocks[i].val << std::endl;
-
-                //communicator shall handle the necessary encryption
                 communicator.write_to_bucket(id, l, d, bkt);
             }
         }
 
-    private:
+    // private:
         int get_node_idx (int leaf_idx, int depth)
         {
             return (1 << depth) + (leaf_idx/(1 << (L - depth))); 
