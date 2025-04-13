@@ -2,7 +2,7 @@
 
 An implementation of (non-recursive) path-oram (https://eprint.iacr.org/2013/280.pdf).
 
-This library provides client-side and server-side components to enable oblivious access to data stored on an untrusted server using the Path ORAM scheme.
+This library provides client-side and server-side components to enable oblivious access to data stored on an untrusted (passively adversarial) server using the Path ORAM scheme.
 
 ## Project Structure
 
