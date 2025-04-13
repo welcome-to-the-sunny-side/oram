@@ -14,12 +14,16 @@ An implementation of (non-recursive) path-oram (https://eprint.iacr.org/2013/280
 
 using namespace oram_lib;
 std::vector<unsigned char> Encryptor::key;
+client_network_communicator cnc;
+void o_init()
+{
+    Encryptor::initialize();
+    cnc.connect_to_server();
+}
 
 int main()
 {
-    Encryptor::initialize();
-    client_network_communicator cnc;
-    cnc.connect_to_server();
+    o_init();
 
     int n;
     std::cin >> n;
@@ -37,7 +41,6 @@ int main()
         std::cout << prefix_sum_a[i] << " ";
     std::cout << std::endl;
 
-    cnc.end_session();
     return 0;
 }
 ```
