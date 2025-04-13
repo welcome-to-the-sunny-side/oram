@@ -6,7 +6,7 @@
 using namespace oram_lib;
 std::vector<unsigned char> Encryptor::key;
 client_network_communicator cnc;
-void server_init()
+void o_init()
 {
     Encryptor::initialize();
     cnc.connect_to_server();
@@ -14,7 +14,7 @@ void server_init()
 
 int main()
 {
-    server_init();
+    o_init();
 
     int n;
     std::cin >> n;
@@ -32,6 +32,5 @@ int main()
         std::cout << prefix_sum_a[i] << " ";
     std::cout << std::endl;
 
-    cnc.end_session();
     return 0;
 }

@@ -35,8 +35,19 @@ int main()
             try
             {
                 uint8_t msg_code;
-                boost::asio::read(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)));
+                boost::system::error_code error;
+                size_t bytes_transferred = boost::asio::read(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)), error);
                 
+                if (error == boost::asio::error::eof || error == boost::asio::error::connection_reset)
+                {
+                    std::cout << "Client disconnected" << std::endl;
+                    break;
+                }
+                else if (error)
+                {
+                    throw boost::system::system_error(error);
+                }
+
                 // std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
                 if(msg_code == 0)
@@ -120,7 +131,7 @@ int main()
             }
             catch (std::exception &e)
             {
-                throw std::runtime_error("message handling error: " + std::string(e.what()));
+                std::cerr << "Message handling error: " << e.what() << std::endl;
                 break;
             }
         }
