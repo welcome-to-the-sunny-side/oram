@@ -19,20 +19,8 @@ This project requires the following libraries:
 *   **Boost**
 *   **OpenSSL:** For secure communication (specifically libssl and libcrypto).
 
-Installation methods vary by operating system. On macOS with Homebrew, you might install them like this:
 
-```bash
-brew install cmake boost openssl@3
-```
-
-On Debian/Ubuntu based systems:
-
-```bash
-sudo apt-get update
-sudo apt-get install build-essential cmake libboost-system-dev libboost-serialization-dev libssl-dev
-```
-
-Make sure the necessary headers and libraries can be found by CMake. The `CMakeLists.txt` might need adjustments based on your installation paths (e.g., `OPENSSL_ROOT_DIR`).
+Make sure the necessary headers and libraries can be found by CMake. The `CMakeLists.txt` file might need adjustments based on your installation paths (e.g., `OPENSSL_ROOT_DIR`).
 
 ## Example client usage
 
