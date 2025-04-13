@@ -39,14 +39,12 @@ int main()
                 
                 // std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
-                switch (msg_code)
-                {
-                case 0:
+                if(msg_code == 0)
                 {
                     // exit
                     return 0;
                 }
-                case 5:
+                else if(msg_code == 5)
                 {
                     // create array
                     int array_id, array_size;
@@ -55,10 +53,8 @@ int main()
 
                     orams.push_back(oram(array_size));
                     oram_id_to_idx[array_id] = orams.size() - 1;
-
-                    break;
                 }
-                case 6:
+                else if(msg_code == 6)
                 {
                     // handle request for path
                     int array_id, leaf_idx;
@@ -79,9 +75,8 @@ int main()
                         boost::asio::write(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
                         boost::asio::write(socket, boost::asio::buffer(str.data(), str_len));
                     }
-                    break;
                 }
-                case 7:
+                else if(msg_code == 7)
                 {
                     // handle write to bucket
                     int array_id, leaf_idx, level;
@@ -117,13 +112,10 @@ int main()
                     // write to bucket
                     int idx = oram_id_to_idx[array_id];
                     orams[idx].write_to_bucket(leaf_idx, level, bkt);
-                    break;
                 }
-                default:
+                else
                 {
                     throw std::runtime_error("invalid message code: " + std::to_string(msg_code));
-                    break;
-                }
                 }
             }
             catch (std::exception &e)
