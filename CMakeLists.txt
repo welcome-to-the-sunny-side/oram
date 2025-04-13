@@ -5,11 +5,6 @@ project(BoostMultiTarget)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Find libsodium
-set(SODIUM_ROOT /opt/homebrew)
-include_directories(${SODIUM_ROOT}/include)
-link_directories(${SODIUM_ROOT}/lib)
-
 # Find Boost
 find_package(Boost REQUIRED COMPONENTS system serialization)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -40,13 +35,11 @@ target_include_directories(oram_lib INTERFACE
     ${CMAKE_SOURCE_DIR}/include
     ${OPENSSL_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${SODIUM_ROOT}/include
 )
 
 target_link_libraries(oram_lib INTERFACE
     Boost::system 
     Boost::serialization
-    sodium
     OpenSSL::SSL 
     OpenSSL::Crypto
 )
