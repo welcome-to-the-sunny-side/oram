@@ -6,12 +6,7 @@ This library provides client-side and server-side components to enable oblivious
 
 ## Project Structure
 
-The core components are organized as follows:
-
-*   `include/`: Contains header files for the ORAM library (`oram_lib.hpp` and specific components like `oram/`, `net/`, `util/`).
-*   `src/`: Contains source code for the client (`src/client/`) and server (`src/server/`) executables, as well as potentially shared library components.
-*   `misc/`: Contains miscellaneous files, like diagrams.
-*   `CMakeLists.txt`: Defines the build process using CMake.
+The interconnectivity of components is shown in the diagram below.
 
 ![ORAM Structure](misc/structure.png)
 
@@ -21,7 +16,7 @@ This project requires the following libraries:
 
 *   **CMake:** (Version 3.10 or higher) For building the project.
 *   **A C++17 compliant compiler:** (e.g., GCC, Clang)
-*   **Boost:** Specifically `system` and `serialization` components.
+*   **Boost**
 *   **OpenSSL:** For secure communication (specifically libssl and libcrypto).
 
 Installation methods vary by operating system. On macOS with Homebrew, you might install them like this:
@@ -38,44 +33,6 @@ sudo apt-get install build-essential cmake libboost-system-dev libboost-serializ
 ```
 
 Make sure the necessary headers and libraries can be found by CMake. The `CMakeLists.txt` might need adjustments based on your installation paths (e.g., `OPENSSL_ROOT_DIR`).
-
-## Building
-
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd path-oram-project # Or your project directory name
-    ```
-
-2.  **Configure with CMake:**
-    ```bash
-    cmake -S . -B build
-    ```
-    *Note: If dependencies are installed in non-standard locations, you might need to provide hints to CMake, e.g., `-DCMAKE_PREFIX_PATH=/path/to/openssl`.*
-
-3.  **Build the project:**
-    ```bash
-    cmake --build build
-    ```
-    This will create the `client` and `server` executables inside the `build/` directory (or subdirectories depending on CMake configuration).
-
-## Running
-
-1.  **Start the Server:**
-    Open a terminal, navigate to the build directory, and run the server:
-    ```bash
-    cd build
-    ./server # Or ./src/server/server depending on build structure
-    ```
-    The server will likely listen on a specific port (this detail might need to be added if known).
-
-2.  **Run the Client:**
-    Open another terminal, navigate to the build directory, and run the client:
-    ```bash
-    cd build
-    ./client # Or ./src/client/client
-    ```
-    The client example provided will connect to the server, perform some ORAM operations, and print results.
 
 ## Example client usage
 
@@ -97,6 +54,8 @@ void o_init()
 int main()
 {
     o_init();
+
+    // write code as you usually would 
 
     int n;
     std::cout << "Enter array size: ";
@@ -120,11 +79,3 @@ int main()
     return 0;
 }
 ```
-
-## TODO
-
-See `TODO.md` for planned features or improvements.
-
-## Contributing
-
-(Optional: Add guidelines for contributing if desired).
