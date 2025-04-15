@@ -9,6 +9,7 @@ void o_init()
 {
     encryptor::initialize();
     cnc.connect_to_server();
+    o_array::init_communicator(cnc);
 }
 
 int main()
@@ -23,7 +24,7 @@ int main()
 
     //benchmark
     auto start1 = std::chrono::high_resolution_clock::now();
-    o_array a(n, cnc);
+    o_array a(n);
     auto end1 = std::chrono::high_resolution_clock::now();
    
     std::cout << "initialization time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count() << "ms" << std::endl;
@@ -32,9 +33,8 @@ int main()
     for(int i = 0; i < q; i ++)
     {
         int idx = rng(n);
-        // int val = rng(std::numeric_limits<int>::max());
-        // a[idx] = val;
-        int val = a[idx];
+        int val = rng(std::numeric_limits<int>::max());
+        a[idx] = val;
     }
     auto end2 = std::chrono::high_resolution_clock::now();
 

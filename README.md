@@ -35,30 +35,26 @@ client_network_communicator cnc;
 void o_init()
 {
     encryptor::initialize();
-    cnc.connect_to_server(); // Ensure server address/port are correctly configured in case the connection fails
+    cnc.connect_to_server();
+    o_array::init_communicator(cnc);
 }
 
 int main()
 {
     o_init();
 
-    // write code as you usually would 
-
     int n;
-    std::cout << "Enter array size: ";
     std::cin >> n;
 
-    o_array a(n, cnc);
-    std::cout << "Enter " << n << " array elements:" << std::endl;
+    o_array a(n);
     for(int i = 0; i < n; i ++)
         std::cin >> a[i];
-
-    o_array prefix_sum_a(n, cnc);
+    
+    o_array prefix_sum_a(n);
     prefix_sum_a[0] = a[0];
     for(int i = 1; i < n; i ++)
         prefix_sum_a[i] = prefix_sum_a[i - 1] + a[i];
-
-    std::cout << "Prefix sums:" << std::endl;
+    
     for(int i = 0; i < n; i ++)
         std::cout << prefix_sum_a[i] << " ";
     std::cout << std::endl;

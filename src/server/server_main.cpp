@@ -48,7 +48,7 @@ int main()
                     throw boost::system::system_error(error);
                 }
 
-                std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
+                // std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
                 if(msg_code == 0)
                 {

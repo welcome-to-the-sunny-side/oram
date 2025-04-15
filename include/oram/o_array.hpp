@@ -26,18 +26,25 @@ namespace oram_lib
         static constexpr int P = 1000000007;
         inline static int o_array_id_cntr = 0;
 
+        inline static client_network_communicator *communicator;
+        static void init_communicator(client_network_communicator &comm)
+        {
+            communicator = &comm;
+        }
+
         int n;                      // number of elements
         int L, N;                   // tree parameters
         int id;                     // array id
         std::vector<int> leaf_map;  // leaf_map[i] = the index of the leaf that the i'th element is mapped to
         std::vector<bool> in_stash; // in_stash[i] = true => i'th element is in the stash
-        client_network_communicator &communicator;
         std::unordered_map<int, block> stash; // local stash of blocks
 
         // initialize an o_array, initially filled with 0s
-        o_array(int n, client_network_communicator &given_communicator) : n(n), L(static_cast<int>(log2(n)) + 1), N(1 << (L + 1)), id(o_array_id_cntr++), leaf_map(N, -1), in_stash(N, false), communicator(given_communicator)
+        o_array(int n) : n(n), L(static_cast<int>(log2(n)) + 1), N(1 << (L + 1)), id(o_array_id_cntr++), leaf_map(N, -1), in_stash(N, false)
         {
-            communicator.create_array(id, n, block(0, N + 1));
+            if(!communicator)
+                throw std::runtime_error("Communicator not initialized");
+            communicator->create_array(id, n, block(0, N + 1));
 
             // fill it with dummy blocks initially
             // for (int leaf_idx = 0; leaf_idx < N / 2; leaf_idx++)
@@ -69,7 +76,7 @@ namespace oram_lib
 
             // request blocks on the relevant path from the server
             // we assume that we receive decrypted blocks from the server
-            std::vector<block> path_blocks = communicator.request_path(id, leaf_map[i]);
+            std::vector<block> path_blocks = communicator->request_path(id, leaf_map[i]);
 
             for (auto &blk : path_blocks)
             {
@@ -112,7 +119,7 @@ namespace oram_lib
                     bkt.blocks[i] = b;
                 }
 
-                communicator.write_to_bucket(id, leaf_idx, d, bkt);
+                communicator->write_to_bucket(id, leaf_idx, d, bkt);
             }
         }
 
