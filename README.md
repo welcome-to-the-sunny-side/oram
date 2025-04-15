@@ -43,6 +43,8 @@ int main()
 {
     o_init();
 
+    //write code like you usually would! (using `o_array <array_name> (n)` in place of `array<int, n> <array_name>`)
+
     int n;
     std::cin >> n;
 
