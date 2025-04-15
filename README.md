@@ -10,13 +10,6 @@ The interconnectivity of components is shown in the diagram below.
 
 ![ORAM Structure](misc/structure.png)
 
-## Benchmarks
-
-A lot of work remains, so this is just an overly simplistic view that isn't indicative of final (or real-world) performance.
-
-![Benchmark 16-04-2025](misc/benchmark-16-04-2025.png)
-
-Note that the time taken per access seems to scale logarithmically with respect to $n$, despite the true computational cost per query being $O(\log^3{n})$. This is because communication costs (which are $O(\log{n})$ ) have a cripplingly high constant factor that dominates over other theoretically more expensive subroutines.
 
 ## Example client usage
 
@@ -73,3 +66,11 @@ This project requires the following libraries:
 
 
 Make sure the necessary headers and libraries can be found by CMake. The `CMakeLists.txt` file might need adjustments based on your installation paths (e.g., `OPENSSL_ROOT_DIR`).
+
+## Benchmarks
+
+A lot of work remains, so this is just an overly simplistic view that isn't indicative of final (or real-world) performance.
+
+![Benchmark 16-04-2025](misc/benchmark-16-04-2025.png)
+
+Note that the time taken per access seems to scale logarithmically with respect to $n$, despite the true computational cost per query being $O(\log^3{n})$. This is because communication costs (which are $O(\log{n})$ ) have a cripplingly high constant factor that dominates over other theoretically more expensive subroutines.

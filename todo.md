@@ -1,5 +1,4 @@
-- write a validity checker
 - optimize
 - offer multiple encryption schemes
-- benchmark
+- properly benchmark
 - template block for o_array
