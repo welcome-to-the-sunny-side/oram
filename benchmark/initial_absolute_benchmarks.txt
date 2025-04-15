@@ -62,7 +62,7 @@ average update time: 0.7444ms
 
 n = 100000, q = 100000
 initialization time: 63996ms
-total update time: 91772ms
-average update time: 0.91772ms
+total update time: 91773ms
+average update time: 0.91773ms
 
 --------------------------------
