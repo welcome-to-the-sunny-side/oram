@@ -9,19 +9,11 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(Boost REQUIRED COMPONENTS system serialization)
 include_directories(${Boost_INCLUDE_DIRS})
 
-# Set OpenSSL root directory and additional paths
-set(OPENSSL_ROOT_DIR "/opt/homebrew/opt/openssl@3")
-set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
-set(OPENSSL_LIBRARIES "${OPENSSL_ROOT_DIR}/lib")
-
 # Find OpenSSL
 find_package(OpenSSL REQUIRED)
 if(NOT OPENSSL_FOUND)
     message(FATAL_ERROR "OpenSSL not found")
 endif()
-
-# Use modern CMake target-based approach
-include_directories(${OPENSSL_INCLUDE_DIR})
 
 # Include project headers
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -33,7 +25,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 add_library(oram_lib INTERFACE)
 target_include_directories(oram_lib INTERFACE 
     ${CMAKE_SOURCE_DIR}/include
-    ${OPENSSL_INCLUDE_DIR}
     ${Boost_INCLUDE_DIRS}
 )
 
@@ -44,18 +35,31 @@ target_link_libraries(oram_lib INTERFACE
     OpenSSL::Crypto
 )
 
-# === Client Executable ===
-add_executable(client
+# === Client Executables ===
+add_executable(client_test
     src/client/client_test.cpp
 )
 
-target_link_libraries(client PRIVATE oram_lib)
+target_link_libraries(client_test PRIVATE oram_lib)
+
 
 # === Server Executable ===
 add_executable(server
     src/server/server_main.cpp
-    # src/oram/block.cpp
-    # src/oram/bucket.cpp
 )
 
 target_link_libraries(server PRIVATE oram_lib)
+
+# === Benchmark Executable ===
+
+add_executable(client_benchmark
+    benchmark/client_benchmark.cpp
+)
+
+target_link_libraries(client_benchmark PRIVATE oram_lib)
+
+add_executable(oram_benchmark
+    benchmark/oram_benchmark.cpp
+)
+
+target_link_libraries(oram_benchmark PRIVATE oram_lib)

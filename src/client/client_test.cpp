@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 #include "include/oram_lib.hpp"
 

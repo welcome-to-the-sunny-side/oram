@@ -1,0 +1,68 @@
+--------------------------------
+
+initial access (both read and write) times
+
+---
+
+n = 100, q = 10000
+initialization time: 36ms
+total update time: 4314ms
+average update time: 0.4314ms
+
+n = 100, q = 10000
+initialization time: 28ms
+total update time: 4301ms
+average update time: 0.4301ms
+
+n = 100, q = 10000
+initialization time: 36ms
+total update time: 4265ms
+average update time: 0.4265ms
+
+n = 100, q = 10000
+initialization time: 27ms
+total update time: 4268ms
+average update time: 0.4268ms
+
+---
+
+n = 1000, q = 10000
+initialization time: 307ms
+total update time: 5674ms
+average update time: 0.5674ms
+
+n = 1000, q = 10000
+initialization time: 302ms
+total update time: 5703ms
+average update time: 0.5703ms
+
+n = 1000, q = 10000
+initialization time: 300ms
+total update time: 5672ms
+average update time: 0.5672ms
+
+---
+
+n = 10000, q = 10000
+initialization time: 6506ms
+total update time: 7529ms
+average update time: 0.7529ms
+
+n = 10000, q = 10000
+initialization time: 6478ms
+total update time: 7519ms
+average update time: 0.7519ms
+
+n = 10000, q = 10000
+initialization time: 6397ms
+total update time: 7444ms
+average update time: 0.7444ms
+
+---
+
+n = 100000, q = 100000
+initialization time: 63996ms
+total update time: 91772ms
+average update time: 0.91772ms
+
+--------------------------------

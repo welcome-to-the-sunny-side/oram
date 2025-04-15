@@ -26,7 +26,6 @@ Make sure the necessary headers and libraries can be found by CMake. The `CMakeL
 
 ```cpp
 #include <iostream>
-#include <vector>
 
 #include "include/oram_lib.hpp"
 
@@ -36,7 +35,7 @@ client_network_communicator cnc;
 void o_init()
 {
     Encryptor::initialize();
-    cnc.connect_to_server(); // Ensure server address/port are correctly configured
+    cnc.connect_to_server(); // Ensure server address/port are correctly configured in case the connection fails
 }
 
 int main()

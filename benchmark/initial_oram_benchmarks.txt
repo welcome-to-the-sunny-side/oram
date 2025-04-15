@@ -1,0 +1,49 @@
+--------------------------------
+
+initial times
+
+---
+
+n = 1000, q = 1000000
+initialization time: 0ms
+total write query time: 1200ms
+average write query time: 0.0012ms
+total random query time: 5573ms
+average random query time: 0.005573ms
+total read query time: 9654ms
+average read query time: 0.009654ms
+
+---
+
+n = 10000, q = 1000000
+initialization time: 6ms
+total write query time: 1180ms
+average write query time: 0.00118ms
+total random query time: 6539ms
+average random query time: 0.006539ms
+total read query time: 11540ms
+average read query time: 0.01154ms
+
+---
+
+n = 100000, q = 1000000
+initialization time: 29ms
+total write query time: 1294ms
+average write query time: 0.001294ms
+total random query time: 9325ms
+average random query time: 0.009325ms
+total read query time: 17246ms
+average read query time: 0.017246ms
+
+---
+
+n = 1000000, q = 1000000
+initialization time: 153ms
+total write query time: 1350ms
+average write query time: 0.00135ms
+total random query time: 10164ms
+average random query time: 0.010164ms
+total read query time: 18678ms
+average read query time: 0.018678ms
+
+--------------------------------
