@@ -11,7 +11,7 @@
 
 namespace oram_lib
 {
-    class Encryptor
+    class encryptor
     {
     private:
         static const int KEY_SIZE = 32;        // 256-bit key

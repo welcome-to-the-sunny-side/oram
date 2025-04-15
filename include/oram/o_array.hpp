@@ -37,18 +37,19 @@ namespace oram_lib
         // initialize an o_array, initially filled with 0s
         o_array(int n, client_network_communicator &given_communicator) : n(n), L(static_cast<int>(log2(n)) + 1), N(1 << (L + 1)), id(o_array_id_cntr++), leaf_map(N, -1), in_stash(N, false), communicator(given_communicator)
         {
-            communicator.create_array(id, n);
+            communicator.create_array(id, n, block(0, N + 1));
 
             // fill it with dummy blocks initially
+            // for (int leaf_idx = 0; leaf_idx < N / 2; leaf_idx++)
+            //     for (int depth = 0; depth <= L; depth++)
+            //     {
+            //         bucket<block> b;
+            //         for (int i = 0; i < bckt::bucket_size; i++)
+            //             b.blocks[i] = block(0, N + 1);
+            //         communicator.write_to_bucket(id, leaf_idx, depth, b);
+            //     }
 
-            for (int leaf_idx = 0; leaf_idx < N / 2; leaf_idx++)
-                for (int depth = 0; depth <= L; depth++)
-                {
-                    bucket<block> b;
-                    for (int i = 0; i < bckt::bucket_size; i++)
-                        b.blocks[i] = block(0, N + 1);
-                    communicator.write_to_bucket(id, leaf_idx, depth, b);
-                }
+            //handle in network_communicator instead
         }
 
         // touch the i'th element of the array (populate stash with it)

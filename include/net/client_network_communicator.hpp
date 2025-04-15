@@ -38,7 +38,7 @@ namespace oram_lib
             boost::asio::write(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)));
         }
 
-        void create_array(int array_id, int array_size) // message code 5
+        void create_array(int array_id, int array_size, block dummy_block) // message code 5
         {
             try
             {
@@ -46,6 +46,10 @@ namespace oram_lib
                 boost::asio::write(socket, boost::asio::buffer(&msg_code, sizeof(msg_code)));
                 boost::asio::write(socket, boost::asio::buffer(&array_id, sizeof(array_id)));
                 boost::asio::write(socket, boost::asio::buffer(&array_size, sizeof(array_size)));
+                
+                //send the encrypted dummy block (security risk since we're sending only one block to be filled everywhere but i'll deal with it later)
+                std::string str = dummy_block.encrypt();
+                boost::asio::write(socket, boost::asio::buffer(str.data(), block::str_len));
             }
             catch (std::exception &e)
             {
@@ -72,10 +76,10 @@ namespace oram_lib
                 // receive every string
                 for (size_t i = 0; i < size; i++)
                 {
-                    size_t str_len;
-                    boost::asio::read(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
-                    std::string str(str_len, '\0');
-                    boost::asio::read(socket, boost::asio::buffer(&str[0], str_len));
+                    // size_t str_len;
+                    // boost::asio::read(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
+                    std::string str(block::str_len, '\0');
+                    boost::asio::read(socket, boost::asio::buffer(&str[0], block::str_len));
                     encrypted_strings.push_back(str);
                 }
 
@@ -113,9 +117,7 @@ namespace oram_lib
                 // send the encrypted strings individually
                 for (const auto &str : encrypted_strings)
                 {
-                    size_t str_len = str.length();
-                    boost::asio::write(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
-                    boost::asio::write(socket, boost::asio::buffer(str.data(), str_len));
+                    boost::asio::write(socket, boost::asio::buffer(str.data(), block::str_len));
                 }
             }
             catch (std::exception &e)

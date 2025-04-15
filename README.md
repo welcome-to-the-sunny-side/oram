@@ -30,11 +30,11 @@ Make sure the necessary headers and libraries can be found by CMake. The `CMakeL
 #include "include/oram_lib.hpp"
 
 using namespace oram_lib;
-std::vector<unsigned char> Encryptor::key;
+std::vector<unsigned char> encryptor::key;
 client_network_communicator cnc;
 void o_init()
 {
-    Encryptor::initialize();
+    encryptor::initialize();
     cnc.connect_to_server(); // Ensure server address/port are correctly configured in case the connection fails
 }
 

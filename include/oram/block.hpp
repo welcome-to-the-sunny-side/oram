@@ -12,6 +12,7 @@ namespace oram_lib
         int val;
         int idx;
         bool rsrvd = false;
+        static constexpr int str_len = 32;      //length of the final encrypted block
 
         block(int v, int i) : val(v), idx(i), rsrvd(false) {};
         block() : block(0, 0) {};
@@ -33,12 +34,12 @@ namespace oram_lib
 
         std::string encrypt()
         {
-            return Encryptor::encrypt(serialize());
+            return encryptor::encrypt(serialize());
         }
 
         static std::string decrypt(std::string encrypted_block)
         {
-            return Encryptor::decrypt(encrypted_block);
+            return encryptor::decrypt(encrypted_block);
         }
         
         std::string serialize()

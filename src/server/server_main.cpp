@@ -48,7 +48,7 @@ int main()
                     throw boost::system::system_error(error);
                 }
 
-                // std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
+                std::cerr << "Received message code: " << int32_t(msg_code) << std::endl;
 
                 if(msg_code == 0)
                 {
@@ -62,8 +62,19 @@ int main()
                     boost::asio::read(socket, boost::asio::buffer(&array_id, sizeof(array_id)));
                     boost::asio::read(socket, boost::asio::buffer(&array_size, sizeof(array_size)));
 
+                    std::string dummy_block_str(block::str_len, '\0');
+                    boost::asio::read(socket, boost::asio::buffer(&dummy_block_str[0], block::str_len));
+
                     orams.push_back(oram(array_size));
                     oram_id_to_idx[array_id] = orams.size() - 1;
+
+                    bucket<std::string> bkt;
+                    for(int i = 0; i < bucket<std::string>::bucket_size; i ++)
+                        bkt.blocks[i] = dummy_block_str;
+                    
+                    int idx = oram_id_to_idx[array_id];
+                    for(int i = 0; i < orams[idx].N; i ++)
+                        orams[idx].tree[i] = bkt;
                 }
                 else if(msg_code == 6)
                 {
@@ -82,9 +93,9 @@ int main()
                     // send the strings
                     for (const auto &str : path)
                     {
-                        size_t str_len = str.length();
-                        boost::asio::write(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
-                        boost::asio::write(socket, boost::asio::buffer(str.data(), str_len));
+                        // size_t str_len = str.length();
+                        // boost::asio::write(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
+                        boost::asio::write(socket, boost::asio::buffer(str.data(), block::str_len));
                     }
                 }
                 else if(msg_code == 7)
@@ -103,10 +114,10 @@ int main()
                     std::vector<std::string> bucket_content;
                     for (size_t i = 0; i < size; i++)
                     {
-                        size_t str_len;
-                        boost::asio::read(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
-                        std::string str(str_len, '\0');
-                        boost::asio::read(socket, boost::asio::buffer(&str[0], str_len));
+                        // size_t str_len;
+                        // boost::asio::read(socket, boost::asio::buffer(&str_len, sizeof(str_len)));
+                        std::string str(block::str_len, '\0');
+                        boost::asio::read(socket, boost::asio::buffer(&str[0], block::str_len));
                         bucket_content.push_back(str);
                     }
 

@@ -1,6 +1,7 @@
 --------------------------------
 
 initial access (both read and write) times
+bucket size = 4
 
 ---
 
