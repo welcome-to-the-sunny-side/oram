@@ -27,21 +27,24 @@ int main()
     o_array a(n);
     auto end1 = std::chrono::high_resolution_clock::now();
    
-    std::cout << "initialization time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count() << "ms" << std::endl;
+    // std::cout << "initialization time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count() << "ms" << std::endl;
 
-    auto start2 = std::chrono::high_resolution_clock::now();
+    int stash_size = 0;
+    // auto start2 = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < q; i ++)
     {
         int idx = rng(n);
         int val = rng(std::numeric_limits<int>::max());
         a[idx] = val;
+        stash_size += a.stash.size();
     }
-    auto end2 = std::chrono::high_resolution_clock::now();
+    // auto end2 = std::chrono::high_resolution_clock::now();
 
-    int time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count();
-    std::cout << "total update time: " << time_taken << "ms" << std::endl;
-    std::cout << "average update time: " << ((long double)time_taken) / ((long double)q) << "ms" << std::endl;
-    
+    // int time_taken = std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count();
+    // std::cout << "total update time: " << time_taken << "ms" << std::endl;
+    // std::cout << "average update time: " << ((long double)time_taken) / ((long double)q) << "ms" << std::endl;
+    std::cout << "average stash size: " << ((long double)stash_size) / ((long double)q) << std::endl;
+
     return 0;
 }
 

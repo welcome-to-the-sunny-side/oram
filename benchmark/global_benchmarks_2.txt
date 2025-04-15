@@ -1,0 +1,31 @@
+--------------------------------
+
+n = 100, q = 10000
+total update time: 3775ms
+average update time: 0.3775ms
+
+--------------------------------
+
+n = 1000, q = 10000
+total update time: 4919ms
+average update time: 0.4919ms
+
+--------------------------------
+
+n = 10000, q = 100000
+total update time: 64120ms
+average update time: 0.6412ms
+
+--------------------------------
+
+n = 100000, q = 100000
+total update time: 76078ms
+average update time: 0.76078ms
+
+--------------------------------
+
+n = 1000000, q = 1000000
+total update time: 868403ms
+average update time: 0.868403ms
+
+--------------------------------

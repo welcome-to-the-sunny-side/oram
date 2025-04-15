@@ -18,6 +18,7 @@ int main()
     auto end1 = std::chrono::high_resolution_clock::now();
     std::cout << "initialization time: " << std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count() << "ms" << std::endl;
 
+
     //perform write queries
     auto start2 = std::chrono::high_resolution_clock::now();
     for(int i = 0; i < q; i ++)

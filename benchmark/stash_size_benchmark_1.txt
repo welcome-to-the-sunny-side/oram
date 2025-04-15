@@ -1,0 +1,14 @@
+---
+
+n = 100, q = 10000
+average stash size: 0.0263
+
+---
+
+n = 1000, q = 10000
+average stash size: 0.0264
+
+---
+
+n = 10000, q = 10000
+average stash size: 0.0228
