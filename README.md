@@ -12,7 +12,7 @@ The interconnectivity of components is shown in the diagram below.
 
 ## Benchmarks
 
-A lot of work remains, so this is just an overly simplistic view that isn't indicative of final performance.
+A lot of work remains, so this is just an overly simplistic view that isn't indicative of final (or real-world) performance.
 
 ![Benchmark 16-04-2025](misc/benchmark-16-04-2025.png)
 
