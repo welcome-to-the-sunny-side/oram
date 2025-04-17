@@ -1,3 +1,5 @@
+(note: this is an initial draft, i intend to document everything more thoroughly)
+
 # Path ORAM Implementation
 
 An implementation of (non-recursive) path-oram (https://eprint.iacr.org/2013/280.pdf).
@@ -73,4 +75,4 @@ A lot of work remains, so this is just an overly simplistic view that isn't indi
 
 ![Benchmark 16-04-2025](misc/benchmark-16-04-2025.png)
 
-Note that the time taken per access seems to scale logarithmically with respect to $n$ here, despite the true computational cost per query being $O(\log^3{n})$. This is because communication costs (which are $O(\log{n})$ ) have a cripplingly high constant factor that dominates over other theoretically more expensive subroutines.
+Note that the time taken per access seems to scale logarithmically with respect to $n$ here, despite the true computational cost being $O(\log^3{n})$. This is because communication costs (which are $O(\log{n})$ ) have a cripplingly high constant factor that dominates over other theoretically more expensive subroutines.
